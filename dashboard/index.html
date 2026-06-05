@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purplle Store Intelligence</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+    --bg:#0b1020;
+    --card:#121933;
+    --card2:#19213f;
+    --border:#28345f;
+    --purple:#8b5cf6;
+    --pink:#ec4899;
+    --blue:#3b82f6;
+    --green:#10b981;
+    --yellow:#f59e0b;
+    --red:#ef4444;
+    --text:#f8fafc;
+    --muted:#94a3b8;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:linear-gradient(135deg,#0b1020,#141b34);
+    color:var(--text);
+    min-height:100vh;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px 32px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(11,16,32,0.9);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.logo-dot{
+    width:14px;
+    height:14px;
+    background:var(--green);
+    border-radius:50%;
+    box-shadow:0 0 18px var(--green);
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+    0%{opacity:1;transform:scale(1)}
+    50%{opacity:0.5;transform:scale(1.2)}
+    100%{opacity:1;transform:scale(1)}
+}
+
+.logo h1{
+    font-size:24px;
+    font-weight:800;
+    background:linear-gradient(to right,#c084fc,#60a5fa);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.meta{
+    display:flex;
+    gap:14px;
+    align-items:center;
+}
+
+.badge{
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    background:rgba(16,185,129,0.15);
+    color:#6ee7b7;
+}
+
+.container{
+    padding:28px;
+}
+
+.kpis{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+    margin-bottom:24px;
+}
+
+.card{
+    background:linear-gradient(145deg,var(--card),var(--card2));
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:22px;
+    padding:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+.kpi{
+    position:relative;
+    overflow:hidden;
+}
+
+.kpi::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);
+    transform:translateX(-100%);
+    animation:shine 4s infinite;
+}
+
+@keyframes shine{
+    100%{transform:translateX(100%)}
+}
+
+.label{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+.value{
+    font-size:42px;
+    font-weight:800;
+}
+
+.sub{
+    margin-top:10px;
+    font-size:13px;
+    color:#6ee7b7;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:24px;
+}
+
+.chart-wrap{
+    height:350px;
+}
+
+.activity{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.activity-item{
+    display:flex;
+    justify-content:space-between;
+    padding:14px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.activity-item span{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.footer{
+    margin-top:24px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.live{
+    color:#6ee7b7;
+    font-weight:700;
+}
+
+@media(max-width:1000px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <div class="logo">
+        <div class="logo-dot"></div>
+        <h1>Purplle Store Intelligence</h1>
+    </div>
+
+    <div class="meta">
+        <div class="badge">LIVE ANALYTICS</div>
+        <div id="clock"></div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="kpis">
+
+        <div class="card kpi">
+            <div class="label">Store Visitors</div>
+            <div class="value" id="visitors">1248</div>
+            <div class="sub">↑ 12.4% from yesterday</div>
+        </div>
+
+        <div class="card kpi">
+            <div class="label">Conversion Rate</div>
+            <div class="value" id="conversion">63%</div>
+            <div class="sub">↑ Real-time checkout tracking</div>
+        </div>
+
+        <div class="card kpi">
+            <div class="label">Average Dwell Time</div>
+            <div class="value" id="dwell">18m</div>
+            <div class="sub">Customers spending longer in beauty zone</div>
+        </div>
+
+        <div class="card kpi">
+            <div class="label">Queue Status</div>
+            <div class="value live">LOW</div>
+            <div class="sub">Billing counters operating smoothly</div>
+        </div>
+
+    </div>
+
+    <div class="grid">
+
+        <div class="card">
+            <div style="font-size:18px;font-weight:700;margin-bottom:18px;">
+                Real-Time Visitor Traffic
+            </div>
+
+            <div class="chart-wrap">
+                <canvas id="trafficChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="font-size:18px;font-weight:700;margin-bottom:18px;">
+                Live Activity Feed
+            </div>
+
+            <div class="activity" id="activityFeed">
+
+                <div class="activity-item">
+                    <div>Customer entered skincare zone</div>
+                    <span>Now</span>
+                </div>
+
+                <div class="activity-item">
+                    <div>Checkout completed</div>
+                    <span>12 sec ago</span>
+                </div>
+
+                <div class="activity-item">
+                    <div>Queue reduced at Counter 2</div>
+                    <span>1 min ago</span>
+                </div>
+
+                <div class="activity-item">
+                    <div>Heatmap spike in cosmetics section</div>
+                    <span>2 min ago</span>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Built with FastAPI • Real-Time Dashboard • CCTV Analytics
+    </div>
+
+</div>
+
+<script>
+const ctx = document.getElementById('trafficChart');
+
+const labels = ['9AM','10AM','11AM','12PM','1PM','2PM','3PM','4PM'];
+
+const data = {
+    labels: labels,
+    datasets: [{
+        label: 'Visitors',
+        data: [120,190,300,420,380,520,610,700],
+        tension:0.4,
+        fill:true,
+        borderWidth:3,
+        borderColor:'#8b5cf6',
+        backgroundColor:'rgba(139,92,246,0.18)'
+    }]
+};
+
+new Chart(ctx,{
+    type:'line',
+    data:data,
+    options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+            legend:{
+                labels:{color:'#fff'}
+            }
+        },
+        scales:{
+            x:{
+                ticks:{color:'#94a3b8'},
+                grid:{color:'rgba(255,255,255,0.05)'}
+            },
+            y:{
+                ticks:{color:'#94a3b8'},
+                grid:{color:'rgba(255,255,255,0.05)'}
+            }
+        }
+    }
+});
+
+function updateClock(){
+    const now = new Date();
+    document.getElementById('clock').innerHTML = now.toLocaleTimeString();
+}
+setInterval(updateClock,1000);
+updateClock();
+
+setInterval(()=>{
+    const visitors = document.getElementById('visitors');
+    visitors.innerText = parseInt(visitors.innerText) + Math.floor(Math.random()*5);
+
+    const conversion = document.getElementById('conversion');
+    conversion.innerText = (60 + Math.floor(Math.random()*8)) + "%";
+},4000);
+</script>
+
+</body>
+</html>

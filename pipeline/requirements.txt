@@ -1,0 +1,7 @@
+# Detection pipeline dependencies
+ultralytics==8.2.87       # YOLOv8 — includes YOLO model download on first run
+opencv-python==4.10.0.84  # video frame processing
+numpy==1.26.4
+requests==2.32.3           # for posting events to API
+torch>=2.0.0              # PyTorch — install CUDA version for GPU: pip install torch --index-url https://download.pytorch.org/whl/cu121
+torchvision>=0.15.0
